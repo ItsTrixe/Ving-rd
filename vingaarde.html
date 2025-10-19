@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vingårde — Christians Vinguide</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 24px}
+    .page-title{font-family:"Playfair Display",serif;font-size:44px;margin:18px 0}
+
+    .toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap}
+    .search{flex:1;min-width:220px;display:flex;gap:8px}
+    .search input{flex:1;padding:10px 12px;border:1px solid #ddd;border-radius:10px}
+    .filter{display:flex;gap:8px}
+    .filter select,.filter button{padding:10px 12px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer}
+    .filter button{border-color:#111;background:#111;color:#fff}
+
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .estate-card{border:1px solid var(--border);background:#fff;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:#111}
+    .estate-card .thumb{aspect-ratio:16/9;overflow:hidden;border-bottom:1px solid var(--border)}
+    .estate-card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .estate-card .body{padding:12px 14px;display:grid;gap:8px}
+    .estate-card .title{font-weight:600}
+    .estate-card .meta{color:#6b7280;font-size:13px;display:flex;gap:8px;flex-wrap:wrap}
+    .estate-card .btn{margin-top:6px;display:inline-block;padding:8px 10px;border-radius:8px;border:1px solid #111;background:#111;color:#fff;font-weight:600}
+
+    @media (max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="index.html#hjem">Christians Vinguide</a>
+      <div></div>
+      <nav class="menu">
+        <a href="index.html#hjem">Hjem</a>
+        <a href="anmeldelser.html">Anmeldelser</a>
+        <a href="vingaarde.html">Vingårde</a> <!-- ← denne side -->
+        <a href="index.html#om-mig">Om Mig</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1 class="page-title">Vingårde</h1>
+
+    <div class="toolbar">
+      <div class="search">
+        <input id="q" type="search" placeholder="Søg efter gård, region, druer..." />
+      </div>
+      <div class="filter">
+        <select id="country">
+          <option value="">Alle lande</option>
+        </select>
+        <button id="reset">Nulstil</button>
+      </div>
+    </div>
+
+    <section id="grid" class="grid"></section>
+  </main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const estates = [
+    { id:"dorli-muhr", name:"Ritme Celler", country:"Spanien", region:"Priorat og Montsant", founded:"2004", grapes:"Carignan, Garnacha, Grenache Blanc, Viura", image:"assets/estates/dorli-muhr.jpg" },
+    { id:"César Márquez Pérez", name:"César Márquez Pérez", country:"Spanien", region:"Bierzo", founded:"2015", grapes:"Mencía, Garnacha Tintorera, Godello", image:"assets/estates/matassa.jpg" },
+  ];
+
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('q');
+  const country = document.getElementById('country');
+  const resetBtn = document.getElementById('reset');
+
+  const unique = arr => [...new Set(arr)].filter(Boolean).sort((a,b)=>a.localeCompare(b,'da'));
+
+  // Fyld lande i dropdown
+  unique(estates.map(e=>e.country)).forEach(c=>{
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    country.appendChild(o);
+  });
+
+  function matches(e, term){
+    if(!term) return true;
+    term = term.toLowerCase();
+    return (
+      e.name.toLowerCase().includes(term) ||
+      (e.region||'').toLowerCase().includes(term) ||
+      (e.grapes||'').toLowerCase().includes(term) ||
+      (e.country||'').toLowerCase().includes(term)
+    );
+  }
+
+  function render(list){
+    grid.innerHTML = '';
+    list.forEach(e=>{
+      const a = document.createElement('a');
+      a.href = `vingaard.html?id=${encodeURIComponent(e.id)}`;
+      a.className = 'estate-card';
+      a.innerHTML = `
+        <div class="thumb"><img src="${e.image}" alt="${e.name}"></div>
+        <div class="body">
+          <div class="title">${e.name}</div>
+          <div class="meta">
+            <span>${e.country}</span> · <span>${e.region}</span> · <span>Grundlagt ${e.founded}</span>
+          </div>
+          <div class="meta"><strong>Druer:</strong> ${e.grapes}</div>
+          <span class="btn">Læs mere →</span>
+        </div>`;
+      grid.appendChild(a);
+    });
+    if(list.length === 0){ grid.innerHTML = '<p>Ingen resultater.</p>'; }
+  }
+
+  function applyFilters(){
+    const term = q.value.trim();
+    const land = country.value;
+    const list = estates.filter(e => matches(e, term) && (land ? e.country === land : true));
+    render(list);
+  }
+
+  q.addEventListener('input', applyFilters);
+  country.addEventListener('change', applyFilters);
+  resetBtn.addEventListener('click', () => {
+    q.value = '';
+    country.value = '';
+    render(estates);
+  });
+
+  // Første load
+  render(estates);
+});
+</script>
+
+  

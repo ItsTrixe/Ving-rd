@@ -1,0 +1,380 @@
+:root{
+  /* palette fra dit billede (lys → mørk) */
+  --pink-50:  #fde4f2;
+  --pink-100: #f9cee7;
+  --pink-200: #f4b8da;
+  --pink-300: #eea1cd;
+  --pink-400: #e68bbe;
+
+  /* tema */
+  --bg:    var(--pink-50);
+  --text:  #2b0f1f;        /* mørk blomme for god kontrast */
+  --line:  var(--pink-100);
+  --card:  #ffffff;        /* kort/sektioner */
+  --accent: var(--pink-400); /* links/markeringer */
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#fff}
+
+/* ===== Navbar (brand til venstre) ===== */
+header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border)}
+.nav{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;height:74px;padding:0 20px}
+.brand{justify-self:start;font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.3px;color:var(--text);text-decoration:none;font-size:30px}
+.menu{justify-self:end;display:flex;align-items:center;gap:28px}
+.menu a{font-size:16px;color:var(--text);text-decoration:none}
+.menu a:hover{opacity:.85}
+.burger{display:none;justify-self:end;background:transparent;border:0;padding:8px;border-radius:10px}
+.burger svg{display:block}
+@media (max-width: 820px){
+  .menu{display:none}
+  .burger{display:block}
+}
+
+/* ===== Mobilmenu ===== */
+.drawer{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none}
+.drawer[aria-hidden="false"]{display:block}
+.panel{position:absolute;right:0;top:0;height:100%;width:320px;background:var(--green);padding:24px;border-left:1px solid var(--border);display:grid;gap:18px}
+.panel a{color:var(--text);text-decoration:none;font-size:18px}
+
+/* ===== Hero (fuld højde) ===== */
+.hero{position:relative;min-height:100vh;display:grid;align-items:center}
+.hero-media{position:absolute;inset:0;z-index:-2}
+.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,.20), rgba(0,0,0,.28));z-index:-1}
+.hero-inner {
+  max-width:1280px;
+  margin:0;              /* Fjern 'auto', som centrerer indholdet */
+  padding:40px 40px;     /* giver luft fra venstre kant */
+  text-align:left;       /* sikrer venstrejustering */
+}
+
+/* === HERO TEKST – præcis 2 linjer på desktop === */
+.headline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: #fff; /* hvid tekst */
+  line-height: 1.05;
+  margin: 0;
+  text-shadow: 0 3px 25px rgba(0, 0, 0, 0.55); /* gør teksten tydelig på lyse baggrunde */
+  max-width: none;
+}
+
+.headline .line{
+  display:block;
+  white-space:nowrap;           /* hver linje må ikke bryde */
+}
+.headline .line:first-child{ font-size:clamp(42px, 6.8vw, 90px); }
+.headline .line:last-child { font-size:clamp(38px, 6.1vw, 82px); margin-top:.35em; }
+
+/* På smalle skærme tillader vi wrap igen */
+@media (max-width: 640px){
+  .headline .line{ white-space:normal; }
+  .headline .line:first-child{ font-size:clamp(28px, 8vw, 48px); }
+  .headline .line:last-child { font-size:clamp(26px, 7.5vw, 44px); }
+}
+
+/* ===== Kontakt-fod ===== */
+.contact{background:#f5f6f7;border-top:1px solid #e6e6e6;color:#111}
+.contact .wrap{max-width:1200px;margin:0 auto;padding:54px 24px}
+.contact h2{margin:0 0 24px 0;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.contact-grid{display:grid;gap:24px;align-items:center;grid-template-columns:1fr}
+.contact-card{background:#fff;border:1px solid #eaeaea;border-radius:22px;box-shadow:var(--shadow);padding:22px;display:grid;gap:12px}
+.contact-row{display:flex;align-items:center;gap:10px}
+.contact-row a{color:inherit;text-decoration:none}
+.contact-icons{display:flex;gap:14px;margin-top:6px}
+.contact-icons a{display:inline-grid;place-items:center;height:36px;width:36px;border-radius:50%;background:#111;color:#fff}
+.copyright{border-top:1px solid #e6e6e6;padding:18px 24px;color:#6b7280;font-size:14px}
+.copyright .wrap{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (min-width: 980px){
+  .contact-grid{grid-template-columns:1.3fr .7fr}
+}
+
+.review-card {
+  background:#fff;
+  border:1px solid #eaeaea;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  padding:22px;
+  margin-top:16px;
+}
+
+.review-text {
+  font-size:17px;
+  line-height:1.6;
+  color:#333;
+  margin:0;
+}
+
+.photo {
+  max-height: 900px;
+  overflow: hidden;
+}
+
+.photo img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+.review-card {
+  background:#fff;
+  border:1px solid #eaeaea;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  padding:24px;
+  margin-top:20px;
+
+  max-width: 800px;     /* gør boksen smallere */
+  margin-left: 0;       /* hold den mod venstre side af højre kolonne */
+}
+
+.review-text {
+  font-size:19px;       /* lidt større skrift */
+  line-height:1.7;
+  color:#333;
+  margin:0;
+}
+
+.card .meta{display:flex;justify-content:flex-start;gap:8px;color:#6b7280;font-size:13px}
+
+/* Gør kortet (linket) sort og uden underline */
+.review-grid a.card {
+  color: #111;
+  text-decoration: none;
+}
+
+/* Sørg for at visited/hover ikke ændrer farve/underline */
+.review-grid a.card:visited,
+.review-grid a.card:hover,
+.review-grid a.card:focus {
+  color: #111;
+  text-decoration: none;
+}
+
+/* Titel bliver sort, meta grå – ingen underline nogen steder */
+.review-grid a.card .title { color: #111; }
+.review-grid a.card .meta,
+.review-grid a.card .meta a {
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.filters{display:flex;gap:12px;align-items:center}
+.filters label{font-size:14px;color:#111;display:flex;gap:6px;align-items:center}
+.filter-select{padding:8px 10px;border:1px solid #e0e0e0;border-radius:10px;background:#fff}
+.filter-clear{padding:8px 12px;border:1px solid #111;background:#111;color:#fff;border-radius:10px}
+@media (max-width: 720px){
+  .filters{flex-wrap:wrap;justify-content:flex-end}
+}
+
+.filter-menu {
+  position: relative;
+  display: inline-block;
+}
+
+#filterBtn {
+  padding: 8px 14px;
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#filterOptions {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.1);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#filterOptions.hidden {
+  display: none;
+}
+
+#filterOptions button {
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+#filterOptions button:hover {
+  background: #f0f0f0;
+}
+
+.hidden { display: none; }
+
+.sort { position: relative; }
+.sort .btn { background:#111; color:#fff; border:0; padding:8px 12px; border-radius:8px; }
+
+.sort .menu {
+  position:absolute; right:0; top:44px;
+  background:#fff; border:1px solid #eaeaea; border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12); padding:8px;
+  display:grid; gap:6px; min-width:140px;
+}
+.sort .menu button { width:100%; text-align:left; padding:8px 10px; border:1px solid #eee; background:#f8f8f8; border-radius:8px; }
+.sort .menu button:hover { background:#f0f0f0; }
+
+.review-text p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.wine-info {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+.wine-info p {
+  margin: 4px 0;
+}
+.wine-info strong {
+  color: #000;
+}
+
+/* --- Vinfo sektion --- */
+.wine-info {
+  background: #faf9f7;
+  border: 1px solid #e3e1de;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 1.5em;
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  color: #3b3b3b;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.wine-info p {
+  margin: 4px 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.wine-info strong {
+  font-weight: 600;
+  color: #111;
+}
+
+.wine-info p span {
+  color: #5a5a5a;
+}
+
+/* Giv review-boksen lidt mere premium-look */
+.review-card {
+  background: #fff;
+  border: 1px solid #e7e7e7;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  padding: 28px;
+  margin-top: 20px;
+  overflow: auto;
+}
+
+/* Gør scrollbaren diskret */
+.review-card::-webkit-scrollbar {
+  width: 8px;
+}
+.review-card::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.review-card::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Lidt spacing på teksten */
+.review-text p {
+  margin-bottom: 1.1em;
+}
+
+.wine-info p {
+  flex-direction: column; /* gør at teksten hopper ned under titlen */
+  align-items: flex-start;
+}
+
+.wine-info strong {
+  margin-bottom: 2px;
+}
+
+.wine-info span {
+  white-space: normal; /* tillad linjeskift */
+  text-align: left;
+  color: #555;
+}
+
+/* Fakta-boks styling */
+#facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#facts li {
+  margin-bottom: 6px; /* mindre luft mellem linjerne */
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+#facts li strong {
+  font-weight: 600;
+  color: #111;
+}
+
+#facts a {
+  color: #5c1b1b;
+  text-decoration: none;
+}
+
+#facts a:hover {
+  text-decoration: underline;
+}
+
+/* Kompakt Fakta-boks */
+aside.box.ext {
+  display: inline-block;
+  height: auto;
+  min-height: unset;
+  background: #fff;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  padding: 16px 20px;
+  margin: 0;
+  vertical-align: top;
+}
+
+aside.box.ext h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+aside.box.ext ul {
+  margin: 0;
+  padding: 0;
+}
+
+aside.box.ext li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+  list-style: none;
+}
+
+aside.box.ext {
+  align-self: start;
+}
+

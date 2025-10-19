@@ -1,0 +1,224 @@
+<!-- ========== FIL 1: anmeldelser.html (liste med kort) ========== -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anmeldelser — Christians Vinguide</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 24px}
+    .page-title{font-family:"Playfair Display",serif;font-size:44px;margin:18px 0}
+
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+
+    .review-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+    .card{border:1px solid var(--border);background:#fff;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+    .card .thumb{aspect-ratio:3/4;overflow:hidden;border-bottom:1px solid var(--border)}
+    .card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .card .body{padding:10px 12px;display:grid;gap:8px}
+    .card .title{font-weight:600}
+    .card .meta{color:#6b7280;font-size:13px;display:flex;gap:8px}
+    .card .btn{margin-top:8px;display:block;text-align:center;padding:10px 12px;border-radius:8px;border:1px solid #111;background:#111;color:#fff;text-decoration:none;font-weight:600}
+
+    /* farver/links i kortene */
+    .review-grid a.card{color:#111;text-decoration:none}
+    .review-grid a.card:visited,
+    .review-grid a.card:hover,
+    .review-grid a.card:focus{color:#111;text-decoration:none}
+    .review-grid a.card .title{color:#111}
+    .review-grid a.card .meta,
+    .review-grid a.card .meta a{color:#6b7280;text-decoration:none}
+
+    /* sortér-popover (du har allerede tilsvarende i style.css; behold enten her eller der) */
+    .sort{position:relative}
+    .sort .btn{background:#111;color:#fff;border:0;padding:8px 12px;border-radius:8px}
+    .sort .menu{
+      position:absolute; right:0; top:44px;
+      background:#fff; border:1px solid #eaeaea; border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.12); padding:8px;
+      display:grid; gap:6px; min-width:140px;
+    }
+    .sort .menu button{width:100%; text-align:left; padding:8px 10px; border:1px solid #eee; background:#f8f8f8; border-radius:8px}
+    .sort .menu button:hover{background:#f0f0f0}
+    .hidden{display:none}
+
+    @media (max-width:1100px){.review-grid{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:720px){.review-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:480px){.review-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="index.html#hjem">Christians Vinguide</a>
+      <div></div>
+      <nav class="menu">
+        <a href="index.html#hjem">Hjem</a>
+        <a href="anmeldelser.html">Anmeldelser</a>
+        <a href="vingaarde.html">Vingårde</a>
+        <a href="index.html#om-mig">Om Mig</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="topbar">
+  <h1 class="page-title">Alle Vin</h1>
+
+  <div class="sort">
+    <button id="filterBtn" class="btn">Sortér</button>
+
+    <div id="filterOptions" class="menu hidden">
+      <!-- Første visning: vælg hvad du vil filtrere på -->
+      <div id="menuRoot">
+        <button data-open="land">Land</button>
+        <button data-open="region">Region</button>
+        <button data-open="drue">Drue</button>
+        <hr>
+        <button id="clearSort" class="muted">Nulstil</button>
+      </div>
+
+      <!-- Anden visning: konkrete værdier (bygges med JS) -->
+      <div id="submenu" class="hidden">
+        <button id="backBtn" class="muted">← Tilbage</button>
+        <div id="submenuList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <section class="review-grid" id="grid"></section>
+  </main>
+
+  <script>
+    // ====== Data (land/region/drue inkluderet) ======
+    const wines = [
+      { id:"César Márquez La Salvación Godello - 2022",  name:"César Márquez La Salvación Godello - 2022",  image:"assets/wines/1.jpg",    country:"Spanien",  region:"Bierzo", grape:"Codello" },
+      { id:"Domaine Etxondoa Xut Blanc - 2022",   name:"Domaine Etxondoa Xut Blanc - 2022", image:"assets/wines/2.jpg", country:"Frankrig", region:"Baskerlandet, Irrouléguy", grape:"Gros Manseng 50% / Petit Manseng 25% / Petit Courbu 25%" },
+      { id:"Casa Agricola Pepe Mendoza Pureza Ánfora - 2023",        name:"Casa Agricola Pepe Mendoza Pureza Ánfora - 2023", image:"assets/wines/3.jpg", country:"Spanien", region:"Alicante",   grape:"Moscatel de Alejandría" },
+    ];
+
+    // ====== Render kort-listen ======
+    const grid = document.getElementById('grid');
+
+    function render(list){
+      grid.innerHTML = '';
+      list.forEach(w => {
+        const a = document.createElement('a');
+        a.href = `anmeldelse.html?id=${encodeURIComponent(w.id)}`;
+        a.className = 'card';
+        a.innerHTML = `
+          <div class="thumb"><img src="${w.image}" alt="${w.name}"></div>
+          <div class="body">
+            <div class="title">${w.name}</div>
+            <div class="meta"><span>Anmeldelse</span></div>
+            <span class="btn">Læs anmeldelse →</span>
+          </div>`;
+        grid.appendChild(a);
+      });
+    }
+
+    // ====== Sortering via popover ======
+    // ==================== SORTERING (to-trins menu) ====================
+
+// Hjælpere til unikke lister
+const unique = (arr) => [...new Set(arr)].sort((a,b)=>a.localeCompare(b,'da'));
+
+// Datasæt til menuer
+const sets = {
+  land:   () => unique(wines.map(w => w.country)),
+  region: () => unique(wines.map(w => w.region)),
+  drue:   () => unique(wines.map(w => w.grape))
+};
+
+// Map fra menu-type til felt i data
+const keyMap = { land: 'country', region: 'region', drue: 'grape' };
+
+// Filtrer og render
+function filterBy(type, value){
+  const key = keyMap[type];
+  if (!key) return;
+  const list = (value === '_ALL_') ? wines : wines.filter(w => w[key] === value);
+  render(list);
+}
+
+// UI-elementer
+const filterBtn     = document.getElementById('filterBtn');
+const filterOptions = document.getElementById('filterOptions');
+const clearBtn      = document.getElementById('clearSort');
+
+const menuRoot     = document.getElementById('menuRoot');
+const submenu      = document.getElementById('submenu');
+const submenuList  = document.getElementById('submenuList');
+const backBtn      = document.getElementById('backBtn');
+
+// Vis/skjul hele popoveren
+filterBtn.addEventListener('click', () => {
+  filterOptions.classList.toggle('hidden');
+  // start altid på root
+  menuRoot.classList.remove('hidden');
+  submenu.classList.add('hidden');
+});
+
+// Åbn underliste (Land/Region/Drue)
+document.querySelectorAll('#menuRoot [data-open]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.open;
+    const values = sets[type]();
+
+    // tøm og byg knapper
+    submenuList.innerHTML = '';
+
+    // “Alle”
+    const all = document.createElement('button');
+    all.textContent = 'Alle';
+    all.addEventListener('click', () => {
+      filterBy(type, '_ALL_');
+      filterOptions.classList.add('hidden');
+    });
+    submenuList.appendChild(all);
+
+    // Værdier
+    values.forEach(v => {
+      const b = document.createElement('button');
+      b.textContent = v;
+      b.addEventListener('click', () => {
+        filterBy(type, v);
+        filterOptions.classList.add('hidden');
+      });
+      submenuList.appendChild(b);
+    });
+
+    // skift visning
+    menuRoot.classList.add('hidden');
+    submenu.classList.remove('hidden');
+  });
+});
+
+// Tilbage til root-menu
+backBtn.addEventListener('click', () => {
+  submenu.classList.add('hidden');
+  menuRoot.classList.remove('hidden');
+});
+
+// Nulstil
+if (clearBtn){
+  clearBtn.addEventListener('click', () => {
+    render(wines);
+    filterOptions.classList.add('hidden');
+  });
+}
+
+// Første load (hvis du ikke allerede kalder den et andet sted)
+render(wines);
+
+  </script>
+</body>
+</html>

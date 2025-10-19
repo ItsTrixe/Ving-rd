@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vingård — Christians Vinguide</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .wrap{max-width:1100px;margin:0 auto;padding:32px 24px}
+    .hero-img{aspect-ratio:21/9;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:18px}
+    .hero-img img{width:100%;height:100%;object-fit:cover;display:block}
+    .h1{font-family:"Playfair Display",serif;font-size:42px;margin:.3em 0}
+    .meta{color:#6b7280;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .content{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+    .box{background:#fff;border:1px solid #eaeaea;border-radius:16px;box-shadow:var(--shadow);padding:18px}
+    @media (max-width:900px){.content{grid-template-columns:1fr}}
+    .ext a{color:#111}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="index.html#hjem">Christians Vinguide</a>
+      <div></div>
+      <nav class="menu">
+        <a href="index.html#hjem">Hjem</a>
+        <a href="anmeldelser.html">Anmeldelser</a>
+        <a href="vingaarde.html">Vingårde</a>
+        <a href="index.html#om-mig">Om Mig</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="hero" class="hero-img"></div>
+    <h1 id="title" class="h1"></h1>
+    <div id="meta" class="meta"></div>
+
+    <section class="content">
+      <article class="box">
+        <h3>Om gården</h3>
+        <p id="about">—</p>
+      </article>
+      <aside class="box ext">
+        <h3>Fakta</h3>
+        <ul id="facts" style="margin:0;padding-left:18px"></ul>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+  // Same IDs as vingaarde.html
+  const estates = [
+    {
+      id: "dorli-muhr",
+      name: "Ritme Celler",
+      country: "Spanien",
+      region: "Priorat og Montsant",
+      founded: "2004",
+      grapes: "Carignan, Garnacha, Grenache Blanc, Viura",
+      image: "assets/estates/dorli-muhr.jpg",
+      website: "https://www.ritmeceller.com/en/",
+      about: `Ritme og Acústic Celler blev grundlagt af Albert Jané tilbage i 2004. Før det arbejdede han for sin far på sin vingård i Penedès. Ritme og Acústic Celler råder over flere vinmarker i området Montsant og Priorat. Vinstokkene ved Ritme Celler er i en alder af 60 - 90 år. For Albert Jané er placeringen vigtigere end at vinmarkerne hænger sammen. Dette gør at hans vinmarker ligger i de bedste områder muligt, så han kan lave den bedste vin muligt. Ritme Celler ligger i Marcà, lige syd for grænsen til Priorat, og gården er over 200 år gammel. 
+
+Lidt senere købte han et andet vineri i Priorat i den lille by La Vilella Alta nord for Gratallops, næsten midt i distriktet Priorat. Gården, som hedder Acústic Celler, ligger i en 370 m højde over vandet, hvor de tilhørende vinstokke er mellem 35 – 80 år.
+
+Albert Jané har siden starten arbejdet økologisk og blev certificeret i 2014. Hans synspunkt er at vin laves i marken og ikke i kælderen. Han bruger kun traditionelle metoder uden tilsætning af pesticider eller Herbicider. Alt arbejde i marken udføres med håndkraft og høsten foregår manuelt. I kælderen bruger han kun små egefade let toastning. For Albert Jané er “Et godt egefad er det, du ikke kan smage”. Det betyder at hans vin har mere fokus på frugten i vinen og at hans vin er mere Terroir drevet. Når vinene skal flaskes, klares den, men filtreres ikke. Det gennemgående for hans vine er den fine afstemning af høj frugtintensitet med mineralitet og frisk syre. Og Intensitet uden klodset tyngde.
+
+
+
+Albert Jané’s marker i Priorat er kendt for sit stejle terræn hvor der er den specielle jord llicorella som er lavet af skifer og kvarts som er meget drænende og næringsfattig jord. Klimaet i Priorat er varmt med et middelhavsklima med varme dage og kølige nætter.
+Hans marker i Montsant er en blanding af llicorella Jord samt Granit, Sand, Kalk og Lerjord. Klimaet i Montsant er middelvarmt til varmt klima med et middelhavsklima, som er mere varieret end Priorat. Det er generelt lidt mildere og mere varieret end Priorat
+
+Albert Jané forklarer forskellen på Montsant og Priorat er at vinene fra Montsant er friske, frugtige og runde, hvor vinene fra Priorat har mere charme, intensitet og dybde. I området dyrkes der primært Garnatxa/Grenache og Carinyena/Carignan som de traditionelle druer. Der dyrkes også Cabernet Sauvignon, Merlot og Syrah samt Monastrell/Mourvedre i mindre grad. Blandt de hvide druer er der Grenache Blanc og Macabeo som er de traditionelle, sammen med den aromatiske Pansal/Xarel-lo som ikke er tilladt at dyrke i Priorat.
+`
+    },
+    {
+      id: "César Márquez Pérez",
+      name: "César Márquez Pérez",
+      country: "Spanien",
+      region: "Bierzo",
+      founded: "2015",
+      grapes: "Mencía, Garnacha Tintorera, Godello",
+      image: "assets/estates/matassa.jpg",
+      website: "https://www.domainematassa.com",
+      about: `César Márquez er en stjerne i Bierzo. Hvor han kombinerer sit arbejde på familiens gård Castro Ventosa med sit eget soloprojekt udover. César kommer fra en familie som har haft med vin at gøre i mange år. César er ønolog og har arbejdet med sin Onkel Raúl Pérez på familiens vingård gennem mange år, hvor han overtog tøjlerne i familiens kælder i 2017.
+
+I 2015 restaurerede César en gammel vinkælder i hans hjemby Valtuille de Abajo. Her har han siden lavet en vinserie under eget navn, hvor han fokuserer på at lave fantastisk vin i højeste kvalitet fra egne marker. Hans rødvin for prædikatet Vino de Viña Calificada svarende til en Cru Classé. Hans vinstokke dyrkes på hvid kalkholdig jord, som er specielt for Bierzo. César har også en vinserie ved navnet Vinos de Paraje, hvor han laver vin fra 0,5 hektar marker lidt uden for Valtuille de Abajo.
+
+Han høster druerne tidligt når frugten er sprød, dermed kan han holde sine vine under 13,5% vol. Han kan tilsætte stilke efter behov for at balancere vinene og opnå ekstra kompleksitet. Hans vine taler for sig selv og er noget helt specielt.
+`
+    },
+    {
+      id: "pormenor",
+      name: "Pormenor Vinhos",
+      country: "Portugal",
+      region: "Douro",
+      founded: "2013",
+      grapes: "Field blends",
+      image: "assets/estates/pormenor.jpg",
+      website: "https://pormenorvineyards.com",
+      about: `Finesse-fokuserede Douro-vine fra højderne. Friskhed, skifer og præcision frem for power.`
+    }
+  ];
+
+  // Get ?id= from URL (e.g. vingaard.html?id=dorli-muhr)
+  const params = new URLSearchParams(location.search);
+  const id = (params.get('id') || '').trim();
+  const estate = estates.find(e => e.id === id);
+
+  if (estate) {
+    // Title, hero and meta
+    document.title = `${estate.name} — Christians Vinguide`;
+    document.getElementById('title').textContent = estate.name;
+    document.getElementById('hero').innerHTML = `<img src="${estate.image}" alt="${estate.name}">`;
+    
+
+    // Paragraphs like the wine reviews:
+    // Split on blank lines and wrap each as <p>
+    document.getElementById('about').innerHTML = estate.about
+      .split(/\n\s*\n/)
+      .map(p => `<p>${p.trim()}</p>`)
+      .join('');
+	  
+	  const factsEl = document.getElementById('facts');
+  factsEl.innerHTML = `
+    <li><strong>Land:</strong> ${estate.country}</li>
+    <li><strong>Region:</strong> ${estate.region}</li>
+    <li><strong>Grundlagt:</strong> ${estate.founded}</li>
+    <li><strong>Druer:</strong> ${estate.grapes}</li>
+    ${estate.website ? `<li><strong>Website:</strong> <a href="${estate.website}" target="_blank" rel="noopener">${estate.website}</a></li>` : '' }
+  `;
+  } else {
+    // Not found
+    document.getElementById('title').textContent = 'Vingård ikke fundet';
+    document.getElementById('about').innerHTML =
+      '<div class="review-card">Tjek at linket indeholder ?id=… og matcher en vingård.</div>';
+	  
+  }
+</script>
+
+</body>
+</html>

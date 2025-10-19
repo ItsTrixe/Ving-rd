@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vin — Anmeldelse</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 24px}
+
+    /* === Lås højden på desktop og fjern sidescroll === */
+    @media (min-width: 981px){
+      html, body { height: 100%; overflow: hidden; }
+      /* 74px = header-højde. Wrap fylder resten af skærmen */
+      .wrap { height: calc(100vh - 74px); overflow: hidden; }
+      .detail { height: 100%; }
+    }
+
+    .detail{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      align-items:stretch; /* lige høje kolonner */
+    }
+
+    .photo{
+      height:100%;
+      border:1px solid var(--border);
+      background:#fff;
+      overflow:hidden;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    /* Højre kolonne som fleks, så kortet kan fylde resten og scrolle */
+    .content{
+      display:flex;
+      flex-direction:column;
+      min-height:0; /* vigtigt for at child kan scrolle */
+    }
+
+    .title{
+      font-family:"Playfair Display",serif;
+      font-size:48px;
+      margin:0 0 16px 0;
+    }
+
+    .review-card{
+      background:#fff;
+      border:1px solid #eaeaea;
+      border-radius:22px;
+      box-shadow:0 10px 30px rgba(0,0,0,.12);
+      padding:24px;
+      margin-top:20px;
+
+      /* gør den lige høj med foto + giver indre scroll */
+      flex:1;
+      min-height:0;
+      overflow:auto;
+    }
+
+    .review-text{font-size:19px;line-height:1.7;color:#333;margin:0}
+    .review-text p{margin-bottom:1em}
+
+    /* På mobil: normal sidescroll */
+    @media (max-width:980px){
+      .detail{grid-template-columns:1fr}
+      .wrap, .detail{height:auto}
+      .review-card{overflow:visible}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="index.html#hjem">Christians Vinguide</a>
+      <div></div>
+      <nav class="menu">
+        <a href="index.html#hjem">Hjem</a>
+        <a href="anmeldelser.html">Anmeldelser</a>
+        <a href="index.html#vingaarde">Vingårde</a>
+        <a href="index.html#om-mig">Om Mig</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="detail">
+      <div class="photo"><img id="wineImg" alt="Vin" /></div>
+
+      <!-- VIGTIGT: class="content" på højre kolonne -->
+      <div class="content">
+        <h1 class="title" id="wineTitle">Vin</h1>
+        <div class="review-card">
+          <p class="review-text" id="wineDesc">Her kommer anmeldelsen af vinen…</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+    <script>
+  const wines = {
+    "César Márquez La Salvación Godello - 2022": {
+      name: "César Márquez La Salvación Godello - 2022",
+      image: "assets/wines/1.jpg",
+      producent: "César Márquez Pérez",
+      region: "Bierzo, Spanien",
+      drue: "Godello",
+      alkohol: "13,5%",
+      desc: `
+        <p>César Márquez La Salvación Godello 2022, En dejlig hvidvin fra Bierzo i Spanien. 
+        César Márquez Pérez er en yngre vinmager som har en vingård med 1,5 hektar vinmarker 
+        i den flotte Vinregion Bierzo. César Márquez Pérez er søn af Raúl Pérez som driver 
+        en vingård som også laver nogle fantastiske vine. Hos César Márquez praktiserer de 
+        minimal intervention, manuelt arbejde i marken samt traditionelle dyrkningsmetoder. 
+        Hans La Salvación vin er lavet på den dejlige drue Codello som i min mening er meget undervurderet. 
+        Codello er Spaniens svar på en konkurrent til Chardonnay.</p>
+
+        <p>Flot strågul i glasset. I næsen åbner vinen med friske noter af grøn æble, grape, 
+        citrusfrugt, citron, samt en dejlig krydret duft og let sødme af fersken.</p>
+
+        <p>I munden er den frisk og livlig men har samtidig en god fyldighed og balance. 
+        Vinen har en dejlig dybde kombineret med en god finesse. En fin kompleksitet 
+        og en gennembrydende syre som harmonerer. Vinen har denne dejlige mineralske undertone, 
+        lidt saltede nærmest som komplimenterer vinen godt. Vinen har en lang eftersmag som nærmest 
+        føles lidt cremet men også giver en dejlig friskhed.</p>
+      `
+    },
+
+    "Domaine Etxondoa Xut Blanc - 2022": {
+      name: "Domaine Etxondoa Xut Blanc - 2022",
+      image: "assets/wines/2.jpg",
+      producent: "Domaine Etxondoa",
+      region: "Irrouléguy, Baskerlandet, Frankrig",
+      drue: "Gros Manseng 50%, Petit Manseng 25%, Petit Courbu 25%",
+      alkohol: "13%",
+      desc: `
+        <p>Domaine Etxondoa er en vingård i den Franske del af Baskerlandet i området 
+        Irrouléguy. Vingården er drevet af den unge vinmager Olivier Pouchoulou. Han driver 
+		4,5 Hektar vinmarker som har AOC Irouléguy-appellationen. Domaine Etxondoa
+		praktisere Minimal Intervention, Økologi og Manuelt arbejde i marken. Han har kun 
+		produceret vin siden 2020 hvor han købte Vingården. Hans Xut Blanc er lavet på 
+		50% Gros Manseng, 25% Petit Manseng og 25% Petit Courbu. Druerne er ikke så 
+		kendte fordi der bliver ikke dyrket ret meget af dem, men de laver absolut nogle gode 
+		vine</p>
+
+        <p>I glasset har vinen en flot strågul farve. Næsen åbner med en bouquet af grøn æble, 
+        pære, grape, nektarin og citrus med et strejf af krydderier. I næsen er der en dejlig 
+		mineralitet som fungerer godt med den lette krydret note og syrligheden fra 
+		citrusfrugten.</p>
+
+        <p>I munden fremstår vinen frisk men med en god balance og en dejlig rundhed. Den 
+		har dybde og let cremet tekstur. Den har en god balance mellem friskhed og fedme. 
+		Syren er velintegreret og fremstår ikke for aggressivt. God kompleksitet med et let 
+		mineralsk præg som føles lidt saltet. Eftersmagen er lang med en let friskhed og 
+		krydret finish.</p>
+      `
+    },
+
+    "Casa Agricola Pepe Mendoza Pureza Ánfora - 2023": {
+      name: "Casa Agricola Pepe Mendoza Pureza Ánfora - 2023",
+      image: "assets/wines/3.jpg",
+      producent: "Casa Agricola Pepe Mendoza",
+      region: "Alicante, Spanien",
+      drue: "Moscatel de Alejandría",
+      alkohol: "13%",
+      desc: `
+        <p>Casa Agricola Pepe Mendoza Pureza Ánfora 2023, en fantastisk vin fra Alicante i 
+		Spanien. Casa Agricola Pepe Mendoza er en familieejet vingård med 12 hektar
+		vinmarker. På gården praktiserer de minimal intervention og økologiske principper 
+		med manuel høst og arbejde i marken. Denne vin er lavet på den mindre kendte 
+		Moscatel de Alejandría drue som jeg er blevet stor fan af.</p>
+		
+        <p>I glasset er den flot strågul i farven. Næsen åbner en indbydende bouquet af grøn 
+		æble, hvid fersken, citrus, kvæde, rosenblade og krydderier. Der er en fremstående
+		floralitet og krydret duft i næsen som bliver komplimenteret godt af en duft af 
+		citrusfrugt.</p>
+		
+        <p>I munden er den frisk og livlig med god dybde og finesse. Flot kompleksitet med en 
+		aromatisk struktur. I munden får vinen virkelig lov til at udstråle sig med en 
+		velintegreret syre, god balance og en dejlig mineralitet, nærmest lidt saltet. 
+		Eftersmagen er lang og behagelig med lette strejf af floralitet og krydderier.</p>
+      `
+    }
+  };
+
+  // Læs id fra URL og opdatér siden
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const w = wines[id];
+
+  if (w) {
+    document.getElementById('wineTitle').textContent = w.name;
+    document.getElementById('wineImg').src  = w.image;
+    document.getElementById('wineImg').alt  = w.name;
+    document.getElementById('wineDesc').innerHTML = `
+  <div class="wine-info">
+    <p><strong>Producent</strong><span>${w.producent}</span></p>
+    <p><strong>Region</strong><span>${w.region}</span></p>
+    <p><strong>Drue</strong><span>${w.drue}</span></p>
+    <p><strong>Alkohol</strong><span>${w.alkohol}</span></p>
+  </div>
+  ${w.desc}
+`;
+
+  } else {
+    document.getElementById('wineTitle').textContent = 'Vin ikke fundet';
+    document.getElementById('wineDesc').textContent = 'Tjek at linket indeholder ?id=… og matcher en vin.';
+  }
+  </script>
+</body>
+</html>
